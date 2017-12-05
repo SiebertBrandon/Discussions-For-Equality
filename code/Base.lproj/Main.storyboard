@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Topics-->
+        <!--Events-->
         <scene sceneID="rI8-ZQ-OQD">
             <objects>
                 <tableViewController id="y7a-Xr-OMS" customClass="MainViewController" customModule="Discuss_Action" customModuleProvider="target" sceneMemberID="viewController">
@@ -48,7 +48,7 @@
                             <outlet property="delegate" destination="y7a-Xr-OMS" id="vwA-TV-ux7"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Topics" id="hic-w7-py1">
+                    <navigationItem key="navigationItem" title="Events" id="hic-w7-py1">
                         <barButtonItem key="backBarButtonItem" title=" " id="5oh-vI-GR8"/>
                         <barButtonItem key="leftBarButtonItem" title="About" style="done" id="xOq-fi-Q7t">
                             <connections>
@@ -179,7 +179,7 @@
         <!--About Page View Controller-->
         <scene sceneID="Blh-TP-iL5">
             <objects>
-                <pageViewController storyboardIdentifier="About" autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="vOH-Rb-l0X" customClass="AboutPageViewController" customModule="Discuss_Action" sceneMemberID="viewController"/>
+                <pageViewController storyboardIdentifier="About" autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="vOH-Rb-l0X" customClass="AboutPageViewController" customModule="Discuss_Action" customModuleProvider="target" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="50X-Ly-LO5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1465" y="815"/>
@@ -257,6 +257,7 @@ Software Engineering</string>
                                 <state key="normal" title="To Topic List"/>
                                 <connections>
                                     <action selector="event_list:" destination="k30-1w-23e" eventType="touchUpInside" id="f5x-d5-wbs"/>
+                                    <action selector="event_list:" destination="Dhn-db-oHZ" eventType="touchUpInside" id="yGN-Kh-jfq"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -339,14 +340,14 @@ Software Engineering</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="cell" textLabel="Swl-gi-JMX" style="IBUITableViewCellStyleDefault" id="5BR-Hk-obw">
-                                <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" semanticContentAttribute="playback" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="cell" textLabel="Swl-gi-JMX" style="IBUITableViewCellStyleDefault" id="5BR-Hk-obw">
+                                <rect key="frame" x="0.0" y="56" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="5BR-Hk-obw" id="zJU-vF-1US">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Swl-gi-JMX">
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Swl-gi-JMX">
                                             <rect key="frame" x="16" y="0.0" width="343" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -357,20 +358,20 @@ Software Engineering</string>
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="cell_d" textLabel="tkc-IU-cs7" detailTextLabel="a8r-0J-7QY" style="IBUITableViewCellStyleSubtitle" id="0SL-JX-j2S">
-                                <rect key="frame" x="0.0" y="99.5" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <rect key="frame" x="0.0" y="100" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="0SL-JX-j2S" id="rg5-z7-Hro">
                                     <rect key="frame" x="0.0" y="0.0" width="341" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="tkc-IU-cs7">
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="tkc-IU-cs7">
                                             <rect key="frame" x="16" y="5" width="33.5" height="20.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="a8r-0J-7QY">
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="a8r-0J-7QY">
                                             <rect key="frame" x="16" y="25.5" width="44" height="14.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>

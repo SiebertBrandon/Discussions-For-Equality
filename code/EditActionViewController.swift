@@ -22,14 +22,10 @@ class EditActionViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        item_detail = "THINGS THAT ARE DETAILS"
         isContentEditable = false
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-
-        
-        
         
         
     }

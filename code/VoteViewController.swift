@@ -21,11 +21,11 @@ class VoteViewController: UITableViewController {
     var selected_count = 0
     var topic_data : [String] = ["Test"]
     
-    
     // MARK: - View Controller data source
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 3
     }
 
     override func didReceiveMemoryWarning() {
@@ -39,7 +39,6 @@ class VoteViewController: UITableViewController {
     
     @IBAction func vote_topics(_ sender: Any) {
         
-        // DO DATA WORK
         var selected_indexes:[Int] = []
         for index in 0...self.tableView.numberOfRows(inSection: 0) {
             if (self.tableView.cellForRow(at: IndexPath(row: index, section: 0))?.accessoryType == .checkmark) {
@@ -52,8 +51,12 @@ class VoteViewController: UITableViewController {
         
         
         
-        let view_controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "Calendar")
+        let view_controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "Calendar") as! CalendarViewController
+        
+        view_controller.selected_topic_indexes = selected_indexes
+        
         navigationController?.pushViewController(view_controller, animated: true)
+        
     }
     
     
@@ -63,19 +66,19 @@ class VoteViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return topic_data.count
+        return app_delegate.Stored_Topics.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
-        cell.textLabel?.text = topic_data[indexPath.row]
+        cell.textLabel?.text = app_delegate.Stored_Topics[indexPath.row].get_name()
 
         return cell
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Vote on Topics!"
+        return "Select Your Preferred Topics"
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

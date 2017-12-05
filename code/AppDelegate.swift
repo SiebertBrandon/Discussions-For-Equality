@@ -13,44 +13,65 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Application Properties (WRITTEN BY BRANDON SIEBERT)
     
     var window: UIWindow?
+    var has_shown_about : Bool = false
     var Stored_Events : [Event] = []
     var Stored_Topics : [Topic] = []
-    var Stored_VotingTopics : [VotingTopic] = []
-    var Stored_VotingDates : [VotingDate] = []
     var Current_Date : Date = Date()
+    
+    var Selected_Event : Event? = nil
     
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        var all_stored_items : [Any] = [[], [], [], []]
+        //var all_stored_items : Any = [[], [], [], []]
         
         // Load data from json file
         if let path = Bundle.main.path(forResource: "topics", ofType: "json") {
             print(path)
             do {
-                print("Load JSON From File")
-                let json_from_file = try String(contentsOf: URL(fileURLWithPath: path), encoding: .utf8)
-                print("JSON Loaded")
-                print(json_from_file)
-                print("Decoding JSON")
-                all_stored_items = try JSONDecoder().decode([StoredData].self, from: json_from_file.data(using: .utf8)!)
-                self.Stored_Events = all_stored_items[0] as! [Event]
-                self.Stored_Topics = all_stored_items[1] as! [Topic]
-                self.Stored_VotingTopics = all_stored_items[2] as! [VotingTopic]
-                self.Stored_VotingDates = all_stored_items[3] as! [VotingDate]
-                print(self.Stored_Topics)
+                let topics_json_from_file = try String(contentsOf: URL(fileURLWithPath: path), encoding: .utf8)
+                let loaded_topics = try JSONDecoder().decode([Topic].self, from: topics_json_from_file.data(using: .utf8)!)
+                self.Stored_Topics = loaded_topics
+                print(Stored_Topics)
             }
-            catch {/* Silent fail to default with no data */}
+            catch {
+                print("error: \(error)")
+            }
+        }
+        if let loaded_events = UserDefaults.standard.object(forKey: "events") {
+            self.Stored_Events = loaded_events as! [Event]
+            print(Stored_Events)
+        }
+            
+        // If there is no stored session available, load from defaults json
+        else if let path = Bundle.main.path(forResource: "events", ofType: "json") {
+            print(path)
+            do {
+                let events_json_from_file = try String(contentsOf: URL(fileURLWithPath: path), encoding: .utf8)
+                self.Stored_Events = try JSONDecoder().decode([Event].self, from: events_json_from_file.data(using: .utf8)!)
+                print(Stored_Events)
+            }
+            catch {
+                print("error: \(error)")
+            }
+        }
+        // If all else fails, initialize to empty
+        else {
+            self.Stored_Events = []
+            self.Stored_Events.append(Event())
+            print(Stored_Events)
         }
         
-        let shown_startup_about = UserDefaults.standard.bool(forKey: "shown_startup_about")
+        var has_shown_about = UserDefaults.standard.bool(forKey: "has_shown_about")
         
-        if shown_startup_about {
+        if has_shown_about {
             window?.rootViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "Topics")
         }
         else {
             window?.rootViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "About")
+            has_shown_about = true;
+            UserDefaults.standard.set(has_shown_about, forKey: "has_shown_about")
         }
         return true
     }

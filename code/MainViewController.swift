@@ -12,27 +12,35 @@ class MainViewController: UITableViewController {
     // MARK: - Application Properties (WRITTEN BY BRANDON SIEBERT)
     let app_delegate = UIApplication.shared.delegate as! AppDelegate
     
-    var current_events : [Event] = []
-    var past_events : [Event] = []
+    var current_events : [Int] = []
+    var past_events : [Int] = []
     
     // MARK: - View Controller data source
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Split Current and Past Events
-        for event in app_delegate.Stored_Events {
-            print("For Each Event")
+        
+        // Count
+        for (index, event) in app_delegate.Stored_Events.enumerated() {
             if event.get_date() == nil {
-                self.current_events.append(event)
-                print("Adding Current Event")
+                self.current_events.append(index)
             }
-            else if event.get_date()! > app_delegate.Current_Date {
-                self.current_events.append(event)
-            }
-            else if event.get_date()! < app_delegate.Current_Date {
-                self.past_events.append(event)
+            else {
+                print("Comparing: \(event.get_date()!) and \(app_delegate.Current_Date)")
+                if event.get_date()! > app_delegate.Current_Date {
+                    self.current_events.append(index)
+                }
+                else if event.get_date()! < app_delegate.Current_Date {
+                    event.set_stage(stage : 3)
+                    self.past_events.append(index)
+                }
             }
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -42,7 +50,12 @@ class MainViewController: UITableViewController {
     
     @IBAction func add_topic(_ sender: Any) {
         let view_controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "Vote")
-        self.present(view_controller, animated: true, completion: nil)
+        print("Stage : \(app_delegate.Stored_Events[0].get_stage())")
+        if app_delegate.Stored_Events[0].get_stage() == 0 {
+            app_delegate.Selected_Event = app_delegate.Stored_Events[0]
+            self.present(view_controller, animated: true, completion: nil)
+        }
+       
     }
     
     @IBAction func about(_ sender: Any) {
@@ -57,14 +70,12 @@ class MainViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(section)
+
         if section == 0 {
-            print(current_events.count)
-            return current_events.count
+            return self.current_events.count
         }
         else if section == 1 {
-            print(past_events.count)
-            return past_events.count
+            return self.past_events.count
         }
         else {
             return 0
@@ -74,24 +85,25 @@ class MainViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let view_controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "Topic") as! TopicViewController
-        
-        view_controller.topic_name = self.tableView.cellForRow(at: indexPath)?.textLabel?.text
-        view_controller.isPastTopic = indexPath.section == 0 ? false : true
-        
+        if indexPath.section == 0 {
+            view_controller.this_event = app_delegate.Stored_Events[self.current_events[indexPath.row]]
+        }
+        else if indexPath.section == 1 {
+            view_controller.this_event = app_delegate.Stored_Events[self.past_events[indexPath.row]]
+        }
         navigationController?.pushViewController(view_controller, animated: true)
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
-        print(indexPath.section)
         if indexPath.section == 0 {
-            cell.textLabel?.text = current_events[indexPath.row].get_topic().get_name()
-            cell.detailTextLabel?.text = current_events[indexPath.row].get_topic().get_description()
+            cell.textLabel?.text = app_delegate.Stored_Events[self.current_events[indexPath.row]].get_topic().get_name()
+            cell.detailTextLabel?.text = app_delegate.Stored_Events[self.current_events[indexPath.row]].get_topic().get_description()
         }
         else if indexPath.section == 1 {
-            cell.textLabel?.text = past_events[indexPath.row].get_topic().get_name()
-            cell.detailTextLabel?.text = past_events[indexPath.row].get_topic().get_description()
+            cell.textLabel?.text = app_delegate.Stored_Events[self.past_events[indexPath.row]].get_topic().get_name()
+            cell.detailTextLabel?.text = app_delegate.Stored_Events[self.past_events[indexPath.row]].get_topic().get_description()
         }
         return cell
     }

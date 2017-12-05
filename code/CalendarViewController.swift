@@ -18,6 +18,7 @@ class CalendarViewController: UITableViewController {
 
     // MARK: - View Controller properties
     var selected_count = 0
+    var selected_topic_indexes : [Int] = []
     var day_data:[Date] {
         var temp:[Date] = []
         for count in 1...10 {
@@ -47,9 +48,23 @@ class CalendarViewController: UITableViewController {
         }
         
         print(selected_indexes)
+        var voted_days : [Date] = []
+        for selected_index in selected_indexes {
+            voted_days.append(day_data[selected_index])
+        }
         
+        var voted_topics : [Topic] = []
+        for selected_topic_index in selected_topic_indexes {
+            voted_topics.append(app_delegate.Stored_Topics[selected_topic_index])
+        }
         
-        
+        if app_delegate.Selected_Event != nil {
+            print("Adding votes to event")
+            app_delegate.Selected_Event!.add_topic_votes(topics: voted_topics)
+            app_delegate.Selected_Event!.add_time_votes(dates: voted_days)
+            app_delegate.Selected_Event!.make_decision()
+            app_delegate.Stored_Events[0] = app_delegate.Selected_Event!
+        }
         
         self.dismiss(animated: true, completion: nil)
     }

@@ -16,32 +16,22 @@ class TopicViewController: UITableViewController {
     // MARK: - View Controller properties
     @IBOutlet weak var action_button: UIBarButtonItem!
     
-    
     // MARK: - View Controller properties
-    var isPastTopic:Bool!
-    var topic_name:String!
-    var header_titles:[String]!
-    var topic_data:[[String]]!
-    let topic_votes = [10, 6, 3, 1]
-    
+    var this_event : Event = Event()
+    var header_titles : [String] = []
     
     // MARK: - View Controller data source
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationItem.title = topic_name
+        self.navigationItem.title = this_event.get_topic().get_name()
         
-        if isPastTopic {
+        if this_event.did_event_pass() {
             header_titles = ["Scheduled", "Description", "Action Items"]
-            topic_data = [["FUNDAY"], ["Cool Stories all around bro..."], ["Do the thing 1", "Do the thing 2", "Do the thing 3"]]
-            
             action_button.title = "Add Action"
         }
-        
         else {
             header_titles = ["Scheduled", "Description", "Tips"]
-            topic_data = [["FUNDAY"], ["Cool Stories all around bro..."],["Be nice", "Be cool", "Be Bae"]]
-            
             action_button.title = "Attend"
             self.tableView.isUserInteractionEnabled = false
         }
@@ -55,7 +45,7 @@ class TopicViewController: UITableViewController {
     
     @IBAction func button_action(_ sender: Any) {
         
-        if isPastTopic {
+        if this_event.did_event_pass() {
             
         }
         
@@ -65,8 +55,6 @@ class TopicViewController: UITableViewController {
             alertController.addAction(UIAlertAction(title: "OK", style: .default)
             {
                 (action: UIAlertAction!) in
-                
-                // APP LOGIC to ATTEND THING
                 
                 self.action_button.title = "Unattend"
                 self.action_button.tintColor = UIColor.red
@@ -87,6 +75,7 @@ class TopicViewController: UITableViewController {
 
         view_controller.item_text = self.tableView.cellForRow(at: indexPath)?.textLabel?.text
         
+        
         navigationController?.pushViewController(view_controller, animated: true)
     }
     
@@ -95,23 +84,53 @@ class TopicViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return topic_data[section].count
+        if section == 0 {
+            return 1
+        }
+        else if section == 1 {
+            return 1
+        }
+        else if section == 2 {
+            if this_event.did_event_pass() {
+                return this_event.get_actions().count
+            }
+            else {
+                return this_event.get_topic().get_tips().count
+            }
+        }
+        return 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        if indexPath.section == 2 && isPastTopic {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell_d", for: indexPath)
-            cell.textLabel?.text = topic_data[indexPath.section][indexPath.row]
-            cell.detailTextLabel?.text = "\(topic_votes[indexPath.row]) votes"
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        if indexPath.section == 0 {
+            if this_event.get_date() == nil {
+                cell.textLabel?.text = "No Date Sceduled"
+                return cell
+            }
+            else {
+                let formatter = DateFormatter()
+                formatter.dateFormat = "dd/MM/yyyy 'at' h:mm a"
+                cell.textLabel?.text = formatter.string(from: this_event.get_date()!)
+                return cell
+            }
+        }
+        else if indexPath.section == 1 {
+            cell.textLabel?.text = this_event.get_topic().get_description()
             return cell
         }
-        
-        else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-            cell.textLabel?.text = topic_data[indexPath.section][indexPath.row]
-            return cell
+        else if indexPath.section == 2 {
+            if this_event.did_event_pass() {
+                cell.textLabel?.text = this_event.get_actions()[indexPath.row].get_title()
+                cell.detailTextLabel?.text = "\(this_event.get_actions()[indexPath.row].get_title()) votes"
+                return cell
+            }
+            else {
+                cell.textLabel?.text = this_event.get_topic().get_tips()[indexPath.row]
+                return cell
+            }
         }
+        return cell
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
