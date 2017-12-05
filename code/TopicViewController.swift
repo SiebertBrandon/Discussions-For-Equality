@@ -1,9 +1,12 @@
-//
-//  TopicViewController.swift
-//  Discuss Action
-//
-//  Copyright © 2017 Brandon Siebert. All rights reserved.
-//
+// Name: Brandon Siebert
+// Course: CSC 415
+// Semester: Fall 2017
+// Instructor: Dr. Pulimood 
+// Project name: Discuss Action
+// Description: iOS application that facilitates active discussion for social justice issues. 
+// Filename: TopicViewController.swift
+// Description: Provides data views for a specific event. Changes depending upon if the event is in the future or the past.
+// Last modified on: 12/4/2017
 
 import UIKit
 
